@@ -11,12 +11,20 @@ struct HomeView: View {
     // if the onboarding exists in the app storage, it will skip the initialization and never change the value.
     // if it does not exist it will initialize it with the value
     @AppStorage("onboarding") var isOnboardingActive : Bool = false
+    @State private var isAnimating : Bool = false
     var body: some View {
         VStack(spacing:20) {
             Spacer()
             // MARK: - Center
-            RingsView(ringColor: .gray.opacity(0.2), forgroundImage: "character-2")
-            
+            ZStack {
+                RingsView(ringColor: .gray.opacity(0.2)   )
+                Image("character-2")
+                    .resizable()
+                    .scaledToFit()
+                    .padding()
+                    .offset(y: isAnimating ? -35 : 35)
+                    .animation(.easeInOut(duration: 4).repeatForever(), value: isAnimating)
+            }
             Text(
             """
             The time that leads to mastery is
@@ -47,6 +55,11 @@ struct HomeView: View {
                 .buttonBorderShape(.capsule)
                 .controlSize(.small)
             
+        }
+        .onAppear(){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                isAnimating = true
+            })
         }
     }
 }

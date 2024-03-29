@@ -9,21 +9,30 @@ import SwiftUI
 
 struct RingsView: View {
     var ringColor: Color
-    var forgroundImage: String
+    @State private var isAnimating : Bool = false
     var body: some View {
         ZStack {
-            Circle()
-                .stroke(lineWidth: 40)
-                .foregroundColor(ringColor)
+            
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: 40)
+                    .foregroundColor(ringColor)
                 .frame(width: 256, height: 256, alignment: .center)
-            Circle()
-                .stroke(lineWidth: 80)
-                .foregroundColor(ringColor)
-                .frame(width: 256, height: 256, alignment: .center)
-            Image(forgroundImage)
-                .resizable()
-                .scaledToFit()
-                .padding()
+                Circle()
+                    .stroke(lineWidth: 80)
+                    .foregroundColor(ringColor)
+                    .frame(width: 256, height: 256, alignment: .center)
+            }
+
+                .blur(radius: isAnimating ? 0 : 10)
+                .opacity(isAnimating ? 1 : 0)
+                .scaleEffect(isAnimating ? 1 : 0)
+        }
+        .onAppear(){
+            withAnimation(.easeOut(duration: 1)){
+                isAnimating = true
+            }
+            
         }
     }
 }
@@ -31,7 +40,7 @@ struct RingsView: View {
 #Preview {
     ZStack{
         Color(.colorBlue).ignoresSafeArea()
-        RingsView(ringColor: .white.opacity(0.2), forgroundImage: "character-1")
+        RingsView(ringColor: .white.opacity(0.2)  )
     }
 
 }
