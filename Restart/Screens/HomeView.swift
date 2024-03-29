@@ -42,6 +42,7 @@ struct HomeView: View {
             
             Button{
                 isOnboardingActive = true
+                playSound(sound: "success", type: "m4a")
             }label: {
                     Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
                     .fontWeight(.bold)

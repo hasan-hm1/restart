@@ -17,6 +17,7 @@ struct OnboardingView: View {
     @State private var imageOffset : CGSize = .zero
     @State private var indicatorOpacity : Double = 1.0
     @State private var titleText : String = "Share."
+    let hepticFeedback = UINotificationFeedbackGenerator()
     var body: some View {
         ZStack{
             Color(.colorBlue)
@@ -147,8 +148,11 @@ struct OnboardingView: View {
                                 withAnimation(.easeInOut(duration: 0.4)){
                                     if buttonOffset > buttonWidth / 2 {
                                         isOnboardingActive = false
+                                        playSound(sound: "chimeup", type: "mp3")
+                                        hepticFeedback.notificationOccurred(.success)
                                     } else {
                                         buttonOffset = 0
+                                        hepticFeedback.notificationOccurred(.warning)
                                     }
                                 }
                             }
@@ -166,7 +170,7 @@ struct OnboardingView: View {
         } // : ZStack
         .onAppear(){
             isAnimating = true
-        }
+        }.preferredColorScheme(.dark)
     }
 }
 
